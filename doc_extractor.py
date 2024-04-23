@@ -2,39 +2,50 @@ import os
 import subprocess
 from docx import Document
 
-# Specify directories
-input_directory = 'docs/input/'; 
-output_directory = 'docs/output/'; 
+input_directory = 'docs/input'
+output_directory = 'docs/output'
 
 def convert_to_docx(doc_path, docx_path):
-    # Convert .doc to .docx using LibreOffice
+    """Convert .doc files to .docx using LibreOffice."""
+    print(f"Converting {doc_path} to {docx_path}...")
     subprocess.run(['libreoffice', '--headless', '--convert-to', 'docx',
                     '--outdir', os.path.dirname(docx_path), doc_path],
                    stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
 def extract_text_from_docx(docx_path):
-    # Open and read a .docx file
+    """Extract text from a .docx file using python-docx."""
+    print(f"Extracting text from {docx_path}...")
     document = Document(docx_path)
     return '\n'.join([para.text for para in document.paragraphs])
 
-for filename in os.listdir(input_directory):
-    filepath = os.path.join(input_directory, filename)
-    fileBaseName, fileExtension = os.path.splitext(filename)
-    output_text_path = os.path.join(output_directory, f'{fileBaseName}.txt')
-    
-    if fileExtension.lower() == '.doc':
-        # Convert .doc to .docx
-        docx_path = os.path.join(input_directory, f'{fileBaseName}.docx')
-        convert_to_docx(filepath, docx_path)
-        text = extract_text_from_docx(docx_path)
-    elif fileExtension.lower() == '.docx':
-        # Directly extract text from .docx
-        text = extract_text_from_docx(filepath)
-    else:
-        continue  # Skip non-doc and non-docx files
+def ensure_directory_exists(path):
+    """Ensure that a directory exists, and if not, create it."""
+    print(f"Ensuring directory exists: {path}")
+    os.makedirs(path, exist_ok=True)
 
-    # Save the extracted text to a text file
-    with open(output_text_path, 'w', encoding='utf-8') as text_file:
-        text_file.write(text)
+def process_files():
+    """Process all .doc and .docx files within the input_directory recursively."""
+    for root, dirs, files in os.walk(input_directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            file_base_name, file_extension = os.path.splitext(file)
+            output_rel_path = os.path.relpath(root, input_directory)
+            output_folder = os.path.join(output_directory, output_rel_path)
+            ensure_directory_exists(output_folder)
+            output_file_path = os.path.join(output_folder, f'{file_base_name}.txt')
 
-    print(f"Extracted text saved to {output_text_path}")
+            if file_extension.lower() == '.doc':
+                docx_path = os.path.join(root, f'{file_base_name}.docx')
+                convert_to_docx(file_path, docx_path)
+                text = extract_text_from_docx(docx_path)
+            elif file_extension.lower() == '.docx':
+                text = extract_text_from_docx(file_path)
+
+            # Save the extracted text to a text file
+            if text:
+                with open(output_file_path, 'w', encoding='utf-8') as text_file:
+                    text_file.write(text)
+                print(f"Extracted text saved to {output_file_path}")
+
+if __name__ == "__main__":
+    process_files()
