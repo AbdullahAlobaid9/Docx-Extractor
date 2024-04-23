@@ -28,5 +28,5 @@ To run the script, use the following command:
 
 
    ```bash
-    python extractor.py
+    python doc_extractor.py
 
