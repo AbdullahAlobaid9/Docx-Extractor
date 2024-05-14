@@ -22,11 +22,15 @@ To install the necessary Python packages, follow these steps:
 2. Install the required packages:
     pip install -r requirements.txt
 
+3. Install Apache Tika :
+   https://www.apache.org/dyn/closer.lua/tika/3.0.0-BETA/tika-server-standard-3.0.0-BETA.jar
+
 ## Usage
 
 To run the script, use the following command:
 
-
+   -Run this command : java -jar tika-server-standard-3.0.0-BETA.jar 
+   
    ```bash
     python doc_extractor.py
 
