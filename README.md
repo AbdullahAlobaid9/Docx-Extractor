@@ -30,8 +30,8 @@ Install the required Python packages using pip:
 
 Download and install Apache Tika Server. You can download it from the Apache website:
 
-(https://www.apache.org/dyn/closer.lua/tika/3.0.0-BETA/tika-server-standard-3.0.0-BETA.jar
-)
+[Download Apache Tika Server
+](https://www.apache.org/dyn/closer.lua/tika/3.0.0-BETA/tika-server-standard-3.0.0-BETA.jar)
 After downloading, place the .jar file in a known directory.
 
 ## Usage
