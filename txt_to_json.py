@@ -11,7 +11,7 @@ def stream_to_json_and_text(input_directory, output_json_path, output_text_path)
 
     with open(output_json_path, 'w', encoding='utf-8') as json_file, \
          open(output_text_path, 'w', encoding='utf-8') as text_file:
-        json_file.write('{\n')
+        json_file.write('[\n')
         first = True
         counter = 1  # Initialize a counter for the keys
 
@@ -28,19 +28,21 @@ def stream_to_json_and_text(input_directory, output_json_path, output_text_path)
                         cleaned_content_json = cleaned_content.replace('"', '\\"')
                         
                         # Write to JSON
-                        json_file.write(f'"{counter}": "{cleaned_content_json}"')
-                        
+                        json_file.write('{')
+                        json_file.write(f'"file_{counter}": "{cleaned_content_json}"')
+                        json_file.write('}')
+
                         # Write to text file
                         text_file.write(cleaned_content + "\n")  # Optional: add newline for each document
                         
                         counter += 1  # Increment the counter
-        json_file.write('\n}')
+        json_file.write('\n]')
 
     print("Finished writing to JSON and text file.")
 
 # Define the input and output paths
-input_dir = '/home/abdullah-alobaid/Abdullah-Projects/Docx-Extractor/docs/input/'  # Make sure to update this path to your actual input directory
-output_json = '/home/abdullah-alobaid/Abdullah-Projects/Docx-Extractor/docs/output/all_texts.json'  # Update this path to your desired output directory
-output_text = '/home/abdullah-alobaid/Abdullah-Projects/Docx-Extractor/docs/output/all_texts.txt'  # Update this path to your desired output directory
+input_dir = '/home/riotu/Abdullah-Projects/Docx-Extractor/docs/input/'  # Make sure to update this path to your actual input directory
+output_json = '/home/riotu/Abdullah-Projects/Docx-Extractor/docs/output/all_texts.json'  # Update this path to your desired output directory
+output_text = '/home/riotu/Abdullah-Projects/Docx-Extractor/docs/output/all_texts.txt'  # Update this path to your desired output directory
 
 stream_to_json_and_text(input_dir, output_json, output_text)
